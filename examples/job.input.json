@@ -1,0 +1,9 @@
+{
+  "jobType": "demo",
+  "targets": [
+    "https://example.com"
+  ],
+  "options": {
+    "requestedBy": "hermes-demo"
+  }
+}
