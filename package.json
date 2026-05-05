@@ -1,0 +1,42 @@
+{
+  "name": "hello-hermes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal CLI and MCP scaffold for a Hermes-operated tool.",
+  "type": "module",
+  "bin": "./dist/cli.js",
+  "files": [
+    "dist",
+    "src",
+    "specs",
+    "examples",
+    "skills",
+    "hermes",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/cli.ts src/mcp/server.ts --format esm --dts --sourcemap --clean",
+    "hermes:install": "tsx scripts/hermes-install.ts",
+    "hermes:update": "tsx scripts/hermes-update.ts",
+    "hermes:doctor": "tsx scripts/hermes-doctor.ts",
+    "hermes:install:dry": "tsx scripts/hermes-install.ts --dry-run",
+    "hermes:update:dry": "tsx scripts/hermes-update.ts --dry-run",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "js-yaml": "^4.1.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.32",
+    "tsup": "^8.5.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
