@@ -1,0 +1,11 @@
+mcp_servers:
+  steve_npx_tool:
+    command: "node"
+    args:
+      - "<PROJECT_ROOT>/dist/mcp/server.js"
+    env:
+      TOOL_WORKSPACE: "<TOOL_WORKSPACE>"
+
+skills:
+  external_dirs:
+    - "<PROJECT_ROOT>/skills"

@@ -1,0 +1,7 @@
+{
+  "jobType": "demo",
+  "targets": [
+    "https://example.com"
+  ],
+  "options": {}
+}
