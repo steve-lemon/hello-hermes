@@ -20,6 +20,7 @@
   },
   "include": [
     "src",
+    "scripts",
     "tests",
     "tsup.config.ts"
   ]

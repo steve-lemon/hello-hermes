@@ -5,6 +5,8 @@ export const ERROR_CODES = [
   "SELECTOR_CHANGED",
   "VALIDATION_ERROR",
   "DESTRUCTIVE_ACTION_BLOCKED",
+  "WORKING_TREE_DIRTY",
+  "COMMAND_NOT_ALLOWED",
   "UNKNOWN_ERROR"
 ] as const;
 
@@ -66,3 +68,26 @@ export interface InspectResultMissing {
 }
 
 export type InspectResult = InspectResultFound | InspectResultMissing;
+
+export interface UpdateRepoInput {
+  allowDirty?: boolean;
+  runInstall?: boolean;
+  runBuild?: boolean;
+  runHermesUpdate?: boolean;
+}
+
+export interface UpdateRepoStepResult {
+  name: string;
+  status: "ok" | "failed" | "skipped";
+  message?: string;
+  exitCode?: number | null;
+  stdout?: string;
+  stderr?: string;
+}
+
+export interface UpdateRepoResult {
+  status: "ok" | "failed";
+  steps: UpdateRepoStepResult[];
+  summary: string;
+  errors: ToolError[];
+}

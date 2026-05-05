@@ -10,6 +10,7 @@ mcp_servers:
         - health_check
         - run_job
         - inspect_result
+        - update_repo
 
 skills:
   external_dirs:

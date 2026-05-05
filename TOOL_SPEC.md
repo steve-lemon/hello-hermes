@@ -88,6 +88,13 @@ Hermes must stop and notify Steve before continuing when any of the following oc
 - Preserve incidents separately under `incidents/`.
 - Use `inspect_result` or the saved artifact to verify outcomes.
 
+## Repository Update Policy
+
+- `update_repo` may use `git pull`, `npm install`, `npm run build`, and `npm run hermes:update`.
+- `update_repo` must stop on dirty working trees unless `allowDirty` is explicitly enabled.
+- Do not run `git reset`, `git clean`, `git checkout`, `git push`, or `rm -rf`.
+- After `update_repo`, run `health_check` and a small demo validation before larger jobs.
+
 ## Path Policy
 
 - Never commit absolute local paths into the repository.

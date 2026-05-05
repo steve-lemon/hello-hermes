@@ -117,6 +117,7 @@ Available tools:
 - `health_check`
 - `run_job`
 - `inspect_result`
+- `update_repo`
 
 ## Hermes Config Integration
 
@@ -148,3 +149,59 @@ This repository does not store absolute local paths.
 - Use `<PROJECT_ROOT>` in documentation examples.
 - Runtime installers may resolve absolute paths when updating external Hermes config.
 - Do not commit `/Users/...`, `/home/...`, or `C:\Users\...` paths.
+
+## Hermes Integration
+
+### First install on Hermes machine
+
+```bash
+git clone <repo-url>
+cd <repo-name>
+npm install
+npm run build
+npm run hermes:install
+npm run hermes:doctor
+```
+
+### Update after git pull
+
+```bash
+cd <repo-name>
+git pull
+npm install
+npm run hermes:update
+npm run hermes:doctor
+```
+
+### Dry run
+
+```bash
+npm run hermes:install:dry
+npm run hermes:update:dry
+```
+
+### What the installer changes
+
+- Adds this repo's MCP server to `~/.hermes/config.yaml`
+- Adds this repo's skills directory to Hermes external skill dirs
+- Creates artifacts and incidents directories
+- Backs up config.yaml before modifying it
+- Does not install Hermes itself
+- Does not overwrite unrelated Hermes settings
+
+### Path Handling
+
+This repository does not store absolute local paths.
+
+- Use relative paths inside the repository.
+- Use `<PROJECT_ROOT>` in documentation examples.
+- Runtime installers may resolve absolute paths when updating external Hermes config.
+- Do not commit `/Users/...`, `/home/...`, or `C:\Users\...` paths.
+
+### After install
+
+Restart Hermes or reload its config if needed.
+
+Then ask Hermes:
+
+`Use this tool's skill and run health_check.`

@@ -33,3 +33,28 @@ Stop the run and report immediately when any of the following occurs:
 - Artifact path
 - Whether retry is appropriate
 - Suggested Codex fix
+
+## Repository Update Procedure
+
+Use this only when Steve asks to update this tool or when scheduled maintenance requires pulling the latest GitHub version.
+
+Steps:
+
+1. Run `update_repo`.
+2. If it succeeds, run `health_check`.
+3. If health_check succeeds, report the updated version and status.
+4. If update_repo fails, stop and report the failed step.
+5. Do not retry destructive commands.
+6. Do not run git reset, git clean, git push, or checkout.
+7. If the working tree is dirty, stop and notify Steve.
+
+## Scheduled Update Policy
+
+For scheduled updates:
+
+1. Prefer low-traffic hours.
+2. Run `update_repo`.
+3. Run `health_check`.
+4. Run a small demo job.
+5. If any step fails, create an incident report.
+6. Do not continue with production-scale jobs after a failed update.

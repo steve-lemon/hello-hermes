@@ -1,10 +1,16 @@
 mcp_servers:
-  steve_npx_tool:
+  <safe_project_id>:
     command: "node"
     args:
       - "<PROJECT_ROOT>/dist/mcp/server.js"
     env:
       TOOL_WORKSPACE: "<TOOL_WORKSPACE>"
+    tools:
+      include:
+        - health_check
+        - run_job
+        - inspect_result
+        - update_repo
 
 skills:
   external_dirs:

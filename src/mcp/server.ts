@@ -5,6 +5,7 @@ import { z } from "zod";
 import { healthCheck } from "../core/healthCheck.js";
 import { inspectResult } from "../core/inspectResult.js";
 import { runJob } from "../core/runJob.js";
+import { updateRepo } from "../core/updateRepo.js";
 
 export function createMcpServer(): McpServer {
   const server = new McpServer({
@@ -53,6 +54,24 @@ export function createMcpServer(): McpServer {
       {
         type: "text",
         text: JSON.stringify(await inspectResult(jobId), null, 2)
+      }
+    ]
+  }));
+
+  server.registerTool("update_repo", {
+    title: "Update Repository",
+    description: "Pull latest GitHub changes, install dependencies, rebuild the project, and refresh Hermes integration for this tool.",
+    inputSchema: {
+      allowDirty: z.boolean().optional(),
+      runInstall: z.boolean().optional(),
+      runBuild: z.boolean().optional(),
+      runHermesUpdate: z.boolean().optional()
+    }
+  }, async (input) => ({
+    content: [
+      {
+        type: "text",
+        text: JSON.stringify(await updateRepo(input), null, 2)
       }
     ]
   }));

@@ -27,6 +27,8 @@ describe("validation", () => {
       "AGENTS.md",
       "hermes/config.example.yaml",
       "hermes/config.fragment.yaml",
+      "hermes/install-and-connect.md",
+      "hermes/github-update.md",
       "hermes/cron.example.md",
       "hermes/operating-loop.md",
       "skills/hermes-npx-tool/SKILL.md"

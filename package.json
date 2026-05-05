@@ -23,6 +23,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "lint": "eslint .",
+    "hermes:install": "tsx scripts/hermes-install.ts",
+    "hermes:update": "tsx scripts/hermes-update.ts",
+    "hermes:doctor": "tsx scripts/hermes-doctor.ts",
+    "hermes:install:dry": "tsx scripts/hermes-install.ts --dry-run",
+    "hermes:update:dry": "tsx scripts/hermes-update.ts --dry-run",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -34,6 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
+    "yaml": "^2.8.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
