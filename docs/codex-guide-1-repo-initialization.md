@@ -1,29 +1,38 @@
-# Codex 최종 지침서 1: 저장소 초기화
+# Codex 최종 지침서 1: 저장소 초기화 + 상위 요구사항/스펙 설계
 
 ## 목적
 
 이 지침서는 빈 GitHub 저장소를 로컬에 클론한 뒤, Codex가 TypeScript + npx + MCP + Hermes Skill 기반 도구 프로젝트를 초기화하도록 하기 위한 최종 작업 지침서다.
 
-이 저장소는 나중에 Hermes Agent에 연결되어, Hermes가 도구를 직접 개발하지 않고 MCP를 통해 운영할 수 있어야 한다.
+이 1단계의 핵심은 단순히 코드 골격을 만드는 것이 아니다.
+
+사용자가 이미 작성한 README.md를 읽고, 프로젝트의 상위 요구사항을 정리한 뒤, 향후 실제 개발할 항목을 단계별 TODO와 specs 문서로 남겨야 한다.
+
+상세 구현은 이후 별도의 Codex 실행에서 진행한다.  
+따라서 이 단계에서는 전체 설계와 구현 방향이 흔들리지 않도록 “탑다운 요구사항 정리 + 검증 가능한 시나리오 + 초기 실행 가능한 골격”을 준비하는 것이 목표다.
 
 ---
 
 ## 핵심 목표
 
-- TypeScript 기반 프로젝트
-- npx 실행 가능한 CLI
-- 같은 core logic을 공유하는 CLI + MCP 서버
-- Hermes가 사용할 Skill 문서
-- artifact / incident 운영 구조
-- 테스트, CI, 문서 포함
-- 기존 README.md를 먼저 읽고, 프로젝트 계획을 README.md에 반영
-- 저장소 내부에는 절대경로를 절대 남기지 않음
+- 기존 README.md를 먼저 읽고 프로젝트 의도를 파악한다.
+- README.md에 상위 설계안, 단계별 개발 계획, TODO, 검증 시나리오를 추가한다.
+- specs 폴더를 만들고 항목별 상위 스펙 문서를 준비한다.
+- TypeScript 기반 프로젝트 골격을 만든다.
+- npx 실행 가능한 CLI를 준비한다.
+- 같은 core logic을 공유하는 CLI + MCP 서버 구조를 만든다.
+- Hermes가 사용할 Skill 문서를 준비한다.
+- artifact / incident 운영 구조를 준비한다.
+- 테스트, CI, 문서 기반을 포함한다.
+- 저장소 내부에는 절대경로를 절대 남기지 않는다.
 
 ---
 
 ## Codex에게 줄 작업 지시
 
 너는 이 빈 GitHub 저장소에 TypeScript + npx + MCP + Hermes Skill 기반의 “Hermes 운영 루프용 도구 프로젝트”를 구축한다.
+
+단, 이 단계의 주된 목적은 실제 모든 기능을 구현하는 것이 아니라, README 기반 상위 요구사항 정리, 단계별 개발 계획, specs 문서 구조, 검증 시나리오, 그리고 최소 실행 가능한 프로젝트 골격을 준비하는 것이다.
 
 ## 상황
 
@@ -33,6 +42,7 @@
 - 너는 README.md를 먼저 읽고, 그 내용을 기준으로 프로젝트 구조와 초기 구현 계획을 수립해야 한다.
 - README.md는 삭제하거나 덮어쓰지 않는다.
 - 기존 README.md 내용을 보존하고, 필요한 섹션을 추가하거나 보강한다.
+- 상세 기능 구현은 이후 별도의 Codex 실행에서 진행될 수 있으므로, 향후 구현 항목과 검증 시나리오를 반드시 남긴다.
 
 ---
 
@@ -44,6 +54,7 @@
 - Hermes: 장기 실행 운영자
 - MCP: Hermes가 이 도구를 호출하는 실행 인터페이스
 - Skill: Hermes에게 이 도구를 언제, 어떻게, 어떤 안전 규칙으로 쓸지 알려주는 운영 매뉴얼
+- specs 폴더: 향후 개발할 기능의 요구사항과 검증 기준을 관리하는 설계 기준점
 
 ---
 
@@ -60,6 +71,10 @@
 9. package name은 사용자에게 묻지 말고 자동 결정한다.
 10. 기존 README.md를 반드시 먼저 읽고, 해당 요구사항을 프로젝트 계획에 반영한다.
 11. 저장소 내부 문서와 예시에는 절대경로를 절대 사용하지 않는다.
+12. 향후 개발할 기능은 README TODO와 specs 문서에 남긴다.
+13. 요구사항은 탑다운으로 정리한다.
+14. 각 상위 요구사항에는 검증 가능한 시나리오를 연결한다.
+15. 상세 구현은 이 단계에서 억지로 완성하지 않고, 이후 작업을 위한 명확한 기준을 남긴다.
 
 ---
 
@@ -88,7 +103,7 @@ dist/mcp/server.js
 
 ### 규칙
 
-- README.md, TOOL_SPEC.md, AGENTS.md, hermes/*.md, hermes/*.yaml에는 실제 로컬 절대경로를 쓰지 않는다.
+- README.md, TOOL_SPEC.md, AGENTS.md, hermes/*.md, hermes/*.yaml, specs/*.md에는 실제 로컬 절대경로를 쓰지 않는다.
 - 문서와 예제 설정에서는 `<PROJECT_ROOT>` placeholder를 사용한다.
 - 실제 절대경로는 Hermes 연동 설치 스크립트가 runtime에만 계산한다.
 - GitHub에 commit되는 파일에는 사용자 홈 디렉터리, 로컬 clone 경로, 개인 머신 경로가 들어가면 안 된다.
@@ -126,51 +141,600 @@ AGENTS.md에는 다음 규칙을 추가한다.
 README.md가 있으면 다음을 수행한다.
 
 1. README.md에서 프로젝트 이름, 목적, 요구사항, 제약조건, 예상 사용 흐름을 추출한다.
-2. 추출한 내용을 기준으로 초기 구현 계획을 작성한다.
-3. 기존 README.md는 삭제하지 않는다.
-4. 기존 내용을 보존한다.
-5. 아래 섹션을 README.md 뒤쪽에 추가하거나 기존 섹션을 보강한다.
-
-추가할 README 섹션:
-
-```md
-## Implementation Plan
-
-### Project Summary
-
-README의 기존 내용을 바탕으로 해석한 프로젝트 목적을 요약한다.
-
-### Initial Architecture
-
-- CLI
-- Core logic
-- MCP server
-- Hermes Skill
-- Artifacts
-- Incidents
-- Tests
-- CI
-
-### Development Loop
-
-1. Develop the tool locally with Codex.
-2. Validate with CLI and tests.
-3. Expose the same logic through MCP.
-4. Register the skill for Hermes.
-5. Let Hermes operate the tool for recurring or bulk tasks.
-6. Report failures through structured incidents.
-7. Use Codex to improve the tool.
-
-### Current Scope
-
-이번 초기화 단계에서 구현하는 범위와 아직 구현하지 않는 범위를 구분한다.
-
-### Next Steps
-
-향후 실제 브라우저 자동화, 외부 API 연동, 인증 처리, 스케줄 작업 등을 확장하는 계획을 적는다.
-```
+2. 추출한 내용을 기준으로 상위 요구사항을 정리한다.
+3. 상위 요구사항을 단계별 개발 계획으로 나눈다.
+4. 각 단계별 TODO를 작성한다.
+5. 검증 가능한 시나리오를 작성한다.
+6. specs 폴더에 항목별 스펙 문서 초안을 만든다.
+7. 기존 README.md는 삭제하지 않는다.
+8. 기존 내용을 보존한다.
+9. 아래 섹션을 README.md 뒤쪽에 추가하거나 기존 섹션을 보강한다.
 
 README.md가 없으면 새로 만든다.
+
+---
+
+## README.md에 반드시 추가할 섹션
+
+README.md에는 다음 섹션을 반드시 포함한다.
+
+```md
+## Detected Project Metadata
+
+- Detected package name:
+- Source of package name:
+- Primary purpose:
+- Initial README assumptions:
+
+## Requirements Overview
+
+### Product Goal
+
+이 도구가 최종적으로 해결하려는 문제를 한 문단으로 정리한다.
+
+### Users / Operators
+
+- Steve
+- Codex
+- Hermes Agent
+
+### Operating Model
+
+- Codex develops and maintains the tool.
+- GitHub stores source and history.
+- Hermes operates the tool through MCP.
+- Failures are reported as structured incidents.
+
+## Top-Level Requirements
+
+상위 요구사항을 ID 기반으로 정리한다.
+
+예:
+
+| ID | Requirement | Priority | Status | Spec |
+|---|---|---:|---|---|
+| R-001 | Provide npx CLI entrypoint | High | Planned | specs/001-cli.md |
+| R-002 | Expose MCP tools for Hermes | High | Planned | specs/002-mcp.md |
+| R-003 | Store structured artifacts | High | Planned | specs/003-artifacts.md |
+| R-004 | Report structured incidents | High | Planned | specs/004-incidents.md |
+| R-005 | Support safe periodic operation by Hermes | Medium | Planned | specs/005-hermes-ops.md |
+
+## Phased Development Plan
+
+### Phase 0: Repository Bootstrap
+
+Goal:
+- Prepare TypeScript/npx/MCP project skeleton.
+- Preserve README requirements.
+- Create specs and validation scenarios.
+
+Deliverables:
+- package.json
+- src skeleton
+- specs folder
+- README updates
+- initial tests
+
+### Phase 1: Minimal Executable Demo
+
+Goal:
+- Make CLI and MCP health/demo commands work.
+
+Deliverables:
+- npx . health
+- npx . run --input examples/job.input.json
+- MCP health_check
+- MCP run_job
+
+### Phase 2: Real Tool Implementation
+
+Goal:
+- Implement the actual project-specific tool behavior from README requirements.
+
+Deliverables:
+- Feature-specific modules
+- Real input validation
+- Real artifact outputs
+- Scenario tests
+
+### Phase 3: Hermes Operation Loop
+
+Goal:
+- Let Hermes run recurring/bulk jobs safely.
+
+Deliverables:
+- Skill usage policy
+- Cron prompt examples
+- Incident reporting
+- Stop-and-notify policy
+
+### Phase 4: Maintenance and Improvement Loop
+
+Goal:
+- Use incidents and run results to guide future Codex improvements.
+
+Deliverables:
+- AGENTS.md maintenance rules
+- specs updates
+- regression tests
+- changelog discipline
+
+## Development TODO
+
+TODO는 단계별로 작성한다.
+
+예:
+
+### Phase 0 TODO
+
+- [ ] Read initial README and summarize requirements.
+- [ ] Create TypeScript project skeleton.
+- [ ] Create specs folder.
+- [ ] Create validation scenarios.
+- [ ] Add path handling policy.
+
+### Phase 1 TODO
+
+- [ ] Implement CLI health command.
+- [ ] Implement CLI demo run command.
+- [ ] Implement MCP health_check.
+- [ ] Implement MCP run_job.
+- [ ] Add tests for demo flow.
+
+### Phase 2 TODO
+
+- [ ] Convert README requirements into detailed specs.
+- [ ] Implement real feature modules.
+- [ ] Add scenario-based tests.
+- [ ] Define artifact schema for real outputs.
+
+### Phase 3 TODO
+
+- [ ] Finalize Hermes Skill.
+- [ ] Add recurring operation scenarios.
+- [ ] Add incident reporting workflow.
+- [ ] Validate stop-and-notify cases.
+
+### Phase 4 TODO
+
+- [ ] Review incidents.
+- [ ] Update specs.
+- [ ] Add regression tests.
+- [ ] Improve tool behavior with Codex.
+
+## Validation Scenarios
+
+상위 요구사항별 검증 가능한 시나리오를 작성한다.
+
+예:
+
+### VS-001: Local CLI health check
+
+Given the repository is installed locally  
+When the user runs `npx . health`  
+Then the command returns package metadata and status ok.
+
+### VS-002: Demo job through CLI
+
+Given `examples/job.input.json` exists  
+When the user runs `npx . run --input examples/job.input.json`  
+Then an artifact is created and the result status is ok.
+
+### VS-003: Hermes MCP health check
+
+Given Hermes has registered this repository as an MCP server  
+When Hermes calls `health_check`  
+Then the tool returns status ok and package metadata.
+
+### VS-004: Invalid input handling
+
+Given invalid input is provided  
+When CLI or MCP run_job is called  
+Then the tool returns a structured VALIDATION_ERROR.
+
+### VS-005: Stop-and-notify policy
+
+Given a job requires authentication, CAPTCHA, destructive action, or payment  
+When the tool detects that condition  
+Then it stops and returns a structured error that tells Hermes to notify Steve.
+
+## Specs Index
+
+- specs/000-overview.md
+- specs/001-cli.md
+- specs/002-mcp.md
+- specs/003-artifacts.md
+- specs/004-incidents.md
+- specs/005-hermes-operations.md
+- specs/006-validation-scenarios.md
+- specs/007-future-features.md
+
+## Current Scope
+
+이번 초기화 단계에서 구현하는 범위:
+
+- TypeScript project skeleton
+- npx CLI skeleton
+- MCP server skeleton
+- demo job
+- basic validation
+- specs scaffolding
+- README planning sections
+- path safety policy
+
+이번 단계에서 구현하지 않는 범위:
+
+- 실제 브라우저 자동화
+- 실제 외부 서비스 연동
+- 실제 계정 인증 처리
+- 실제 대량 운영 로직
+- 실제 비즈니스 로직 완성
+
+## Next Steps
+
+다음 Codex 실행에서 진행할 수 있는 작업을 구체적으로 적는다.
+
+예:
+
+1. Expand specs/007-future-features.md into detailed implementation specs.
+2. Implement the first real tool feature from specs.
+3. Add scenario tests for that feature.
+4. Update Hermes Skill with feature-specific operating instructions.
+```
+
+---
+
+## specs 폴더 요구사항
+
+1단계에서 반드시 specs 폴더를 만든다.
+
+```text
+specs/
+├── 000-overview.md
+├── 001-cli.md
+├── 002-mcp.md
+├── 003-artifacts.md
+├── 004-incidents.md
+├── 005-hermes-operations.md
+├── 006-validation-scenarios.md
+└── 007-future-features.md
+```
+
+각 파일은 상세 구현까지 강제하지 않고, 상위 요구사항과 향후 상세화 기준을 담는다.
+
+---
+
+## specs/000-overview.md
+
+포함 내용:
+
+```md
+# Overview Spec
+
+## Purpose
+
+이 저장소가 해결하려는 문제.
+
+## Operating Model
+
+- Codex develops.
+- GitHub stores.
+- Hermes operates.
+- Incidents improve future development.
+
+## Requirement Sources
+
+- Initial README.md
+- User-provided requirements
+- Hermes operation model
+
+## Requirement Hierarchy
+
+- Product goal
+- Top-level requirements
+- Feature specs
+- Validation scenarios
+- Implementation tasks
+
+## Non-Goals
+
+이번 단계에서 하지 않는 것.
+```
+
+---
+
+## specs/001-cli.md
+
+포함 내용:
+
+```md
+# CLI Spec
+
+## Purpose
+
+로컬 개발자와 Codex가 도구를 직접 실행하고 검증하기 위한 CLI.
+
+## Required Commands
+
+- npx . health
+- npx . run --input examples/job.input.json
+- npx . run --json '{...}'
+- npx . inspect --job-id <jobId>
+- npx . mcp
+
+## Future Commands
+
+초기 README 요구사항을 기반으로 향후 필요해 보이는 명령을 TODO로 남긴다.
+
+## Validation Scenarios
+
+CLI와 관련된 검증 시나리오를 연결한다.
+```
+
+---
+
+## specs/002-mcp.md
+
+포함 내용:
+
+```md
+# MCP Spec
+
+## Purpose
+
+Hermes가 이 도구를 호출하기 위한 MCP interface.
+
+## Required Tools
+
+- health_check
+- run_job
+- inspect_result
+
+## Future Tools
+
+초기 README 요구사항을 기반으로 향후 Hermes가 호출해야 할 도구를 TODO로 남긴다.
+
+## Safety
+
+- No destructive action by default.
+- Stop on auth/CAPTCHA/payment/destructive actions.
+
+## Validation Scenarios
+
+MCP 관련 검증 시나리오.
+```
+
+---
+
+## specs/003-artifacts.md
+
+포함 내용:
+
+```md
+# Artifacts Spec
+
+## Purpose
+
+작업 결과를 재검증 가능하게 남긴다.
+
+## Initial Artifact Types
+
+- JSON run result
+- logs placeholder
+- future screenshots placeholder
+- future reports placeholder
+
+## Path Policy
+
+Artifacts must be referenced by relative path in repository-facing outputs.
+
+## Future Artifact Types
+
+초기 README 요구사항을 기반으로 향후 필요 산출물을 TODO로 남긴다.
+```
+
+---
+
+## specs/004-incidents.md
+
+포함 내용:
+
+```md
+# Incidents Spec
+
+## Purpose
+
+Hermes 운영 중 문제가 생겼을 때 Steve와 Codex가 개선에 사용할 수 있는 구조화된 실패 보고서를 남긴다.
+
+## Incident Triggers
+
+- AUTH_REQUIRED
+- CAPTCHA_BLOCKED
+- RATE_LIMITED
+- SELECTOR_CHANGED
+- DESTRUCTIVE_ACTION_BLOCKED
+- VALIDATION_ERROR
+- UNKNOWN_ERROR
+- success rate below threshold
+
+## Incident Template
+
+incident markdown template.
+
+## Future Incident Automation
+
+GitHub issue 생성, 알림 연동 등은 TODO로 남긴다.
+```
+
+---
+
+## specs/005-hermes-operations.md
+
+포함 내용:
+
+```md
+# Hermes Operations Spec
+
+## Purpose
+
+Hermes가 이 도구를 안전하게 장기 운영하기 위한 정책.
+
+## Operating Rules
+
+- Always run health_check first.
+- Use run_job for work.
+- Use inspect_result for verification.
+- Stop and notify Steve on blocked states.
+
+## Recurring Jobs
+
+초기 README 요구사항을 기반으로 주기/대량 작업 후보를 TODO로 남긴다.
+
+## Maintenance Loop
+
+Incident -> Codex fix -> test -> GitHub push -> Hermes update.
+```
+
+---
+
+## specs/006-validation-scenarios.md
+
+포함 내용:
+
+```md
+# Validation Scenarios
+
+## Scenario Format
+
+Each scenario must include:
+
+- ID
+- Requirement
+- Given
+- When
+- Then
+- Verification method
+- Related spec
+- Status
+
+## Initial Scenarios
+
+VS-001 through VS-005를 README와 맞춰 작성한다.
+
+## Future Scenarios
+
+초기 README 요구사항에서 도출된 실제 기능 시나리오를 TODO로 남긴다.
+```
+
+---
+
+## specs/007-future-features.md
+
+초기 README에서 실제 개발해야 할 기능 후보를 뽑아 정리한다.
+
+포함 내용:
+
+```md
+# Future Features
+
+## Source
+
+초기 README에서 도출된 기능 후보.
+
+## Feature Backlog
+
+| ID | Feature | Why it matters | Priority | Depends on | Validation scenario |
+|---|---|---|---:|---|---|
+
+## Phase Mapping
+
+각 기능을 Phase 1, 2, 3, 4 중 어디에서 개발할지 배치한다.
+
+## Open Questions
+
+상세 구현 전 Steve에게 확인해야 할 질문을 정리한다.
+
+## Deferred Decisions
+
+지금 결정하지 않고 나중에 결정할 사항을 정리한다.
+```
+
+---
+
+## 상위 요구사항 정리 방식
+
+README의 내용이 모호하더라도 다음 기준으로 추론해 정리한다.
+
+### Product Requirement
+
+사용자가 궁극적으로 원하는 결과.
+
+### Operational Requirement
+
+Hermes가 반복/대량/주기 작업으로 수행해야 하는 일.
+
+### Developer Requirement
+
+Codex가 유지보수하기 쉽게 필요한 구조.
+
+### Safety Requirement
+
+자동화가 멈춰야 하는 조건.
+
+### Observability Requirement
+
+결과, 로그, artifact, incident를 남기는 방식.
+
+### Integration Requirement
+
+MCP, GitHub, Hermes Skill, future update flow.
+
+각 요구사항에는 ID를 붙인다.
+
+예:
+
+```text
+PR-001 Product goal
+OR-001 Recurring operation
+DR-001 TypeScript structure
+SR-001 Stop on destructive action
+OB-001 Artifact output
+IR-001 MCP interface
+```
+
+---
+
+## 검증 시나리오 작성 방식
+
+각 시나리오는 반드시 검증 가능해야 한다.
+
+형식:
+
+```md
+### VS-001: Scenario name
+
+- Requirement: R-001
+- Given:
+- When:
+- Then:
+- Verification:
+- Related files:
+- Status: Planned
+```
+
+금지:
+
+- “잘 동작해야 한다”
+- “적절히 처리한다”
+- “문제가 없어야 한다”
+
+허용:
+
+- “명령이 exit code 0으로 종료된다”
+- “결과 JSON의 status가 ok다”
+- “artifacts/<jobId>.json이 생성된다”
+- “VALIDATION_ERROR가 반환된다”
+- “incident markdown이 생성된다”
 
 ---
 
@@ -229,6 +793,15 @@ Detected package name: <package-name>
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
+├── specs/
+│   ├── 000-overview.md
+│   ├── 001-cli.md
+│   ├── 002-mcp.md
+│   ├── 003-artifacts.md
+│   ├── 004-incidents.md
+│   ├── 005-hermes-operations.md
+│   ├── 006-validation-scenarios.md
+│   └── 007-future-features.md
 ├── src/
 │   ├── cli.ts
 │   ├── core/
@@ -495,6 +1068,7 @@ vitest를 사용한다.
 5. inspectResult가 존재하는 jobId 결과를 읽는다.
 6. inspectResult가 없는 jobId에 대해 not found를 반환한다.
 7. 저장소 문서와 yaml 예시에 실제 절대경로가 포함되지 않았는지 검사한다.
+8. specs/006-validation-scenarios.md에 README의 핵심 요구사항에 대응되는 검증 시나리오가 존재하는지 확인한다.
 
 ---
 
@@ -519,7 +1093,7 @@ package.json 설정:
 
 - type: "module"
 - bin 등록
-- files에 dist, README, TOOL_SPEC, skills, hermes 포함
+- files에 dist, README, TOOL_SPEC, skills, hermes, specs 포함
 - engines.node는 >=20 권장
 
 ---
@@ -547,18 +1121,22 @@ README.md에 포함:
 1. 이 프로젝트의 목적
 2. Detected package name
 3. 기존 README에서 읽은 요구사항 요약
-4. 초기 구현 계획
-5. 설치
-6. 로컬 개발
-7. npx 실행
-8. CLI 사용법
-9. MCP 서버 실행법
-10. Hermes config 연결 방법
-11. Hermes Skill 등록법
-12. Cron 운영 루프
-13. Artifact/Incident 운영 방식
-14. Codex로 유지보수하는 방식
-15. Path Handling
+4. 상위 요구사항 목록
+5. 단계별 개발 계획
+6. 개발 TODO
+7. 검증 시나리오
+8. Specs Index
+9. 설치
+10. 로컬 개발
+11. npx 실행
+12. CLI 사용법
+13. MCP 서버 실행법
+14. Hermes config 연결 방법
+15. Hermes Skill 등록법
+16. Cron 운영 루프
+17. Artifact/Incident 운영 방식
+18. Codex로 유지보수하는 방식
+19. Path Handling
 
 TOOL_SPEC.md에 포함:
 
@@ -569,6 +1147,7 @@ TOOL_SPEC.md에 포함:
 - stop-and-notify policy
 - artifact policy
 - path policy
+- relation to specs folder
 
 AGENTS.md에 포함:
 
@@ -577,6 +1156,8 @@ AGENTS.md에 포함:
 - output schema를 깨지 말 것
 - 에러 코드를 임의로 바꾸지 말 것
 - 새 기능 추가 시 테스트와 TOOL_SPEC 업데이트 필수
+- 새 기능 추가 시 관련 specs 문서 업데이트 필수
+- 새 기능 추가 시 validation scenario 업데이트 필수
 - destructive action은 기본 차단
 - Hermes는 운영자라는 전제 유지
 - 절대경로 commit 금지
@@ -599,6 +1180,14 @@ npx . inspect --job-id <실제 생성된 jobId>
 npx . mcp
 ```
 
+문서 완료 조건:
+
+- README.md에 상위 요구사항, 단계별 개발 계획, TODO, 검증 시나리오, Specs Index가 있다.
+- specs 폴더가 있고 000~007 문서가 있다.
+- specs/007-future-features.md에 실제 README에서 도출한 향후 기능 후보가 있다.
+- specs/006-validation-scenarios.md에 검증 가능한 시나리오가 있다.
+- 저장소 내부 파일에 실제 로컬 절대경로가 없다.
+
 ---
 
 ## 마지막 보고
@@ -606,13 +1195,18 @@ npx . mcp
 작업이 끝나면 다음을 요약한다.
 
 1. 기존 README에서 읽은 요구사항 요약
-2. 결정된 package name
-3. 생성된 주요 파일
-4. README에 추가/수정한 섹션
-5. 실행한 검증 명령과 결과
-6. Hermes에 연결하는 방법
-7. 다음 TODO
-8. 실제 브라우저 자동화 도구를 붙이려면 어느 파일부터 수정하면 되는지
+2. 도출한 상위 요구사항
+3. 단계별 개발 계획
+4. 생성한 TODO
+5. 생성한 specs 문서 목록
+6. 검증 시나리오 목록
+7. 결정된 package name
+8. 생성된 주요 파일
+9. README에 추가/수정한 섹션
+10. 실행한 검증 명령과 결과
+11. Hermes에 연결하는 방법
+12. 다음 TODO
+13. 실제 기능 구현을 시작하려면 어느 specs 문서부터 상세화해야 하는지
 
 ---
 
@@ -620,22 +1214,27 @@ npx . mcp
 
 1. README.md가 있으면 먼저 읽는다.
 2. README.md의 요구사항을 요약한다.
-3. 현재 git remote 또는 폴더명으로 package name을 결정한다.
-4. 초기 구현 계획을 수립한다.
-5. README.md에 Implementation Plan과 Path Handling을 추가한다.
-6. 저장소 구조를 만든다.
-7. TypeScript/npm/tsup/vitest/eslint 환경을 구성한다.
-8. core types/errors/validation을 구현한다.
-9. healthCheck/runJob/inspectResult를 구현한다.
-10. CLI를 구현한다.
-11. MCP server를 구현한다.
-12. examples를 작성한다.
-13. tests를 작성한다.
-14. Hermes skill/config/cron 문서를 작성한다.
-15. README/TOOL_SPEC/AGENTS/CHANGELOG를 작성한다.
-16. 저장소 문서에 절대경로가 없는지 확인한다.
-17. npm install 후 전체 검증 명령을 실행한다.
-18. 실패하면 수정하고 다시 검증한다.
-19. 최종 요약을 출력한다.
+3. 상위 요구사항을 ID 기반으로 정리한다.
+4. 단계별 개발 계획을 수립한다.
+5. 향후 개발 TODO를 Phase별로 작성한다.
+6. 검증 가능한 시나리오를 작성한다.
+7. specs 폴더와 000~007 문서를 만든다.
+8. specs/007-future-features.md에 README에서 도출한 향후 개발 항목을 정리한다.
+9. 현재 git remote 또는 폴더명으로 package name을 결정한다.
+10. README.md에 Implementation Plan, Top-Level Requirements, Development TODO, Validation Scenarios, Specs Index, Path Handling을 추가한다.
+11. 저장소 구조를 만든다.
+12. TypeScript/npm/tsup/vitest/eslint 환경을 구성한다.
+13. core types/errors/validation을 구현한다.
+14. healthCheck/runJob/inspectResult를 구현한다.
+15. CLI를 구현한다.
+16. MCP server를 구현한다.
+17. examples를 작성한다.
+18. tests를 작성한다.
+19. Hermes skill/config/cron 문서를 작성한다.
+20. README/TOOL_SPEC/AGENTS/CHANGELOG를 작성한다.
+21. 저장소 문서에 절대경로가 없는지 확인한다.
+22. npm install 후 전체 검증 명령을 실행한다.
+23. 실패하면 수정하고 다시 검증한다.
+24. 최종 요약을 출력한다.
 
 지금부터 이 저장소에서 위 요구사항을 구현해라.
