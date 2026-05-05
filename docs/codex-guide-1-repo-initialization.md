@@ -1,17 +1,23 @@
-# Codex 최종 지침서 1: TypeScript + npx + MCP + Hermes Skill 저장소 초기화
+# Codex 최종 지침서 1: 저장소 초기화
 
 ## 목적
 
-이 지침서는 빈 GitHub 저장소를 로컬에 클론한 뒤, Codex가 프로젝트를 초기화하도록 하기 위한 작업 지침서다.
+이 지침서는 빈 GitHub 저장소를 로컬에 클론한 뒤, Codex가 TypeScript + npx + MCP + Hermes Skill 기반 도구 프로젝트를 초기화하도록 하기 위한 최종 작업 지침서다.
 
-최종 목표는 다음과 같다.
+이 저장소는 나중에 Hermes Agent에 연결되어, Hermes가 도구를 직접 개발하지 않고 MCP를 통해 운영할 수 있어야 한다.
 
-- TypeScript 기반 npx 실행 가능 CLI 도구를 만든다.
-- 같은 core 로직을 CLI와 MCP 서버가 공유하게 만든다.
-- Hermes Agent가 이 도구를 MCP로 호출할 수 있게 한다.
-- Hermes가 사용할 Skill 문서를 포함한다.
-- Codex가 향후 도구 개발과 유지보수를 이어갈 수 있도록 문서와 테스트를 준비한다.
-- 사용자가 이미 작성해둔 README.md를 읽고, 프로젝트 요구사항을 반영한 초기 구조와 계획을 수립한 뒤 README.md에 업데이트한다.
+---
+
+## 핵심 목표
+
+- TypeScript 기반 프로젝트
+- npx 실행 가능한 CLI
+- 같은 core logic을 공유하는 CLI + MCP 서버
+- Hermes가 사용할 Skill 문서
+- artifact / incident 운영 구조
+- 테스트, CI, 문서 포함
+- 기존 README.md를 먼저 읽고, 프로젝트 계획을 README.md에 반영
+- 저장소 내부에는 절대경로를 절대 남기지 않음
 
 ---
 
@@ -28,23 +34,18 @@
 - README.md는 삭제하거나 덮어쓰지 않는다.
 - 기존 README.md 내용을 보존하고, 필요한 섹션을 추가하거나 보강한다.
 
-## 최종 목표
+---
 
-Steve는 Codex로 도구를 개발/개선/유지보수한다.
+## 역할 분리
 
-Hermes Agent는 이 도구를 직접 개발하지 않고, MCP로 호출해서 대량/지속/주기 작업을 수행한다.
+- Steve: 도구의 요구사항 정의, 운영 판단, 최종 승인
+- Codex: 도구 개발, 개선, 유지보수
+- GitHub: 소스 관리, 변경 이력, 배포 기준점
+- Hermes: 장기 실행 운영자
+- MCP: Hermes가 이 도구를 호출하는 실행 인터페이스
+- Skill: Hermes에게 이 도구를 언제, 어떻게, 어떤 안전 규칙으로 쓸지 알려주는 운영 매뉴얼
 
-문제가 생기면 Hermes가 구조화된 실패 보고서를 남기고 Steve에게 알려줄 수 있어야 한다.
-
-## 핵심 아키텍처
-
-- TypeScript core logic
-- npx 실행 가능한 CLI
-- 같은 core logic을 호출하는 MCP stdio server
-- Hermes가 읽을 Skill 문서
-- Hermes config 예시
-- Cron 운영 프롬프트 예시
-- 테스트/CI/문서 포함
+---
 
 ## 중요 원칙
 
@@ -58,6 +59,63 @@ Hermes Agent는 이 도구를 직접 개발하지 않고, MCP로 호출해서 �
 8. 로그인, CAPTCHA, 결제, 삭제, 인증 실패, 대량 변경 전에는 반드시 중단하고 사용자에게 보고하는 정책을 문서화한다.
 9. package name은 사용자에게 묻지 말고 자동 결정한다.
 10. 기존 README.md를 반드시 먼저 읽고, 해당 요구사항을 프로젝트 계획에 반영한다.
+11. 저장소 내부 문서와 예시에는 절대경로를 절대 사용하지 않는다.
+
+---
+
+## 절대경로 정책
+
+### 핵심 원칙
+
+저장소에는 절대경로를 절대 포함하지 않는다.
+
+금지 예:
+
+```text
+/Users/steve/...
+/home/someone/...
+C:\Users\someone\...
+```
+
+허용 예:
+
+```text
+./skills
+dist/mcp/server.js
+<PROJECT_ROOT>/skills
+<PROJECT_ROOT>/dist/mcp/server.js
+```
+
+### 규칙
+
+- README.md, TOOL_SPEC.md, AGENTS.md, hermes/*.md, hermes/*.yaml에는 실제 로컬 절대경로를 쓰지 않는다.
+- 문서와 예제 설정에서는 `<PROJECT_ROOT>` placeholder를 사용한다.
+- 실제 절대경로는 Hermes 연동 설치 스크립트가 runtime에만 계산한다.
+- GitHub에 commit되는 파일에는 사용자 홈 디렉터리, 로컬 clone 경로, 개인 머신 경로가 들어가면 안 된다.
+
+README.md에는 다음 섹션을 추가한다.
+
+```md
+## Path Handling
+
+This repository does not store absolute local paths.
+
+- Use relative paths inside the repository.
+- Use `<PROJECT_ROOT>` in documentation examples.
+- Runtime installers may resolve absolute paths when updating external Hermes config.
+- Do not commit `/Users/...`, `/home/...`, or `C:\Users\...` paths.
+```
+
+AGENTS.md에는 다음 규칙을 추가한다.
+
+```md
+## Path Rules
+
+- Never commit absolute paths into the repository.
+- Use relative paths or `<PROJECT_ROOT>` placeholders.
+- Only installer scripts may resolve absolute paths at runtime.
+- Never hardcode `/Users/...`, `/home/...`, or `C:\Users\...`.
+```
 
 ---
 
@@ -124,6 +182,7 @@ package name을 사용자에게 묻지 마라.
 
 1. package.json이 이미 있고 name이 있으면 그 값을 우선 사용한다.
 2. git remote origin URL이 있으면 저장소 이름을 사용한다.
+3. git remote origin이 없으면 현재 작업 폴더 이름을 사용한다.
 
 예:
 
@@ -131,9 +190,6 @@ package name을 사용자에게 묻지 마라.
 git@github.com:steve/my-hermes-tool.git -> my-hermes-tool
 https://github.com/steve/my-hermes-tool.git -> my-hermes-tool
 ```
-
-3. git remote origin이 없으면 현재 작업 폴더 이름을 사용한다.
-4. npm package name으로 정규화한다.
 
 정규화 규칙:
 
@@ -144,7 +200,7 @@ https://github.com/steve/my-hermes-tool.git -> my-hermes-tool
 - 앞뒤 하이픈 제거
 - 사용자가 별도 지시하지 않는 한 scoped package는 사용하지 않는다
 
-package.json name, README, Hermes config, npx 예제는 모두 이 package name을 사용한다.
+package.json name, README, Hermes config 예시, npx 예제는 모두 이 package name을 사용한다.
 
 README 상단 또는 적절한 위치에 다음을 표시한다.
 
@@ -189,6 +245,7 @@ Detected package name: <package-name>
 │       └── SKILL.md
 ├── hermes/
 │   ├── config.example.yaml
+│   ├── config.fragment.yaml
 │   ├── cron.example.md
 │   └── operating-loop.md
 ├── examples/
@@ -276,6 +333,7 @@ npx <detected-package-name> mcp
 - 실제 브라우저 자동화는 아직 구현하지 않는다.
 - demo job은 targets 배열을 순회하며 성공 결과를 만든다.
 - 결과 JSON을 artifacts/<jobId>.json에 저장한다.
+- artifact 경로는 출력에서 상대경로로 표시한다.
 - 실패 케이스 검증을 위해 invalid input은 VALIDATION_ERROR를 반환한다.
 
 ---
@@ -297,6 +355,10 @@ MCP tools:
 - timestamp
 - TOOL_WORKSPACE env
 
+주의:
+
+- cwd나 TOOL_WORKSPACE를 사용자-facing 문서에 기록할 때는 실제 절대경로 대신 `<PROJECT_ROOT>` 또는 `<TOOL_WORKSPACE>`로 마스킹한다.
+
 ### 2. run_job
 
 - core/runJob.ts 호출
@@ -315,15 +377,16 @@ MCP tools:
 
 hermes/config.example.yaml을 작성한다.
 
-내용 예시:
+문서용 예시는 절대경로를 쓰지 않는다.
 
 ```yaml
 mcp_servers:
   steve_npx_tool:
-    command: "npx"
-    args: ["-y", "<detected-package-name>", "mcp"]
+    command: "node"
+    args:
+      - "<PROJECT_ROOT>/dist/mcp/server.js"
     env:
-      TOOL_WORKSPACE: "/Users/steve/agent-workspace"
+      TOOL_WORKSPACE: "<TOOL_WORKSPACE>"
     tools:
       include:
         - health_check
@@ -332,14 +395,14 @@ mcp_servers:
 
 skills:
   external_dirs:
-    - "./skills"
+    - "<PROJECT_ROOT>/skills"
 ```
 
 주의:
 
-- <detected-package-name>은 실제 package.json name으로 치환한다.
-- 로컬 개발 중에는 args를 ["." , "mcp"]로 쓰는 대안도 README에 설명한다.
-- npx -y는 publish 후 사용 기준이다.
+- `<PROJECT_ROOT>`는 문서용 placeholder다.
+- 실제 Hermes config에는 2단계 installer가 runtime에 절대경로를 계산해서 기록한다.
+- 이 저장소에는 실제 절대경로를 commit하지 않는다.
 
 ---
 
@@ -431,6 +494,7 @@ vitest를 사용한다.
 4. 잘못된 입력은 VALIDATION_ERROR를 반환한다.
 5. inspectResult가 존재하는 jobId 결과를 읽는다.
 6. inspectResult가 없는 jobId에 대해 not found를 반환한다.
+7. 저장소 문서와 yaml 예시에 실제 절대경로가 포함되지 않았는지 검사한다.
 
 ---
 
@@ -494,6 +558,7 @@ README.md에 포함:
 12. Cron 운영 루프
 13. Artifact/Incident 운영 방식
 14. Codex로 유지보수하는 방식
+15. Path Handling
 
 TOOL_SPEC.md에 포함:
 
@@ -503,6 +568,7 @@ TOOL_SPEC.md에 포함:
 - retry policy
 - stop-and-notify policy
 - artifact policy
+- path policy
 
 AGENTS.md에 포함:
 
@@ -513,6 +579,7 @@ AGENTS.md에 포함:
 - 새 기능 추가 시 테스트와 TOOL_SPEC 업데이트 필수
 - destructive action은 기본 차단
 - Hermes는 운영자라는 전제 유지
+- 절대경로 commit 금지
 
 ---
 
@@ -555,7 +622,7 @@ npx . mcp
 2. README.md의 요구사항을 요약한다.
 3. 현재 git remote 또는 폴더명으로 package name을 결정한다.
 4. 초기 구현 계획을 수립한다.
-5. README.md에 Implementation Plan을 추가한다.
+5. README.md에 Implementation Plan과 Path Handling을 추가한다.
 6. 저장소 구조를 만든다.
 7. TypeScript/npm/tsup/vitest/eslint 환경을 구성한다.
 8. core types/errors/validation을 구현한다.
@@ -566,8 +633,9 @@ npx . mcp
 13. tests를 작성한다.
 14. Hermes skill/config/cron 문서를 작성한다.
 15. README/TOOL_SPEC/AGENTS/CHANGELOG를 작성한다.
-16. npm install 후 전체 검증 명령을 실행한다.
-17. 실패하면 수정하고 다시 검증한다.
-18. 최종 요약을 출력한다.
+16. 저장소 문서에 절대경로가 없는지 확인한다.
+17. npm install 후 전체 검증 명령을 실행한다.
+18. 실패하면 수정하고 다시 검증한다.
+19. 최종 요약을 출력한다.
 
 지금부터 이 저장소에서 위 요구사항을 구현해라.
