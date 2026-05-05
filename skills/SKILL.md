@@ -14,6 +14,7 @@ This skill is for operating `hello-hermes` through its CLI and MCP interface.
 - Stop on structured failures and report them to Steve.
 - Do not run destructive git commands.
 - If local changes exist, stop and notify Steve before updating.
+- For browser search tasks, prefer the built-in `browser_search` tool or `search` CLI command.
 
 ## Update Procedure
 

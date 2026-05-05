@@ -4,6 +4,7 @@
 
 - `health`: 런타임 상태와 패키지 정보를 JSON으로 반환
 - `run`: 입력 파일을 검증하고 demo job 실행
+- `search`: 브라우저 검색을 열고 상위 검색 결과를 JSON으로 보고
 - `inspect`: 저장된 artifact를 조회
 - `mcp`: Hermes가 호출할 MCP 서버 실행
 - 실제 기능 어댑터: demo 이후 도메인별 작업 로직 연결

@@ -94,7 +94,7 @@ export function syncHermesConfig(input: HermesConfigSyncInput): HermesConfig {
       TOOL_WORKSPACE: input.toolWorkspace,
     },
     tools: {
-      include: ["health_check", "run_job", "inspect_result", "update_repo"],
+      include: ["health_check", "run_job", "browser_search", "inspect_result", "update_repo"],
     },
   };
 

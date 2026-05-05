@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-import { healthCheck, inspectResult, jobInputSchema, runJob, updateRepo } from "../core/index";
+import { healthCheck, inspectResult, runJob, updateRepo } from "../core/index";
 
 export function createMcpServer(): McpServer {
   const server = new McpServer({
@@ -31,14 +31,51 @@ export function createMcpServer(): McpServer {
     "run_job",
     {
       title: "Run Job",
-      description: "Validate input and run the shared core demo job.",
-      inputSchema: jobInputSchema.shape,
+      description: "Validate input and run the shared core job.",
+      inputSchema: {
+        jobType: z.enum(["demo", "browser_search"]),
+        targets: z.array(z.string()).optional(),
+        query: z.string().optional(),
+        options: z.record(z.string(), z.unknown()).optional(),
+      },
     },
     async (input) => ({
       content: [
         {
           type: "text",
           text: JSON.stringify(await runJob(input), null, 2),
+        },
+      ],
+    }),
+  );
+
+  server.registerTool(
+    "browser_search",
+    {
+      title: "Browser Search",
+      description: "Open a browser search for a query and report top parsed search results.",
+      inputSchema: {
+        query: z.string().min(1),
+        openBrowser: z.boolean().optional(),
+        resultLimit: z.number().int().min(1).max(10).optional(),
+      },
+    },
+    async ({ query, openBrowser, resultLimit }) => ({
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(
+            await runJob({
+              jobType: "browser_search",
+              query,
+              options: {
+                ...(openBrowser === undefined ? {} : { openBrowser }),
+                ...(resultLimit === undefined ? {} : { resultLimit }),
+              },
+            }),
+            null,
+            2,
+          ),
         },
       ],
     }),

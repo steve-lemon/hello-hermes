@@ -19,6 +19,7 @@ function printUsage(): void {
   npx . health
   npx . run --input examples/job.input.json
   npx . run --json '{"jobType":"demo","targets":["https://example.com"],"options":{}}'
+  npx . search --query "hello hermes"
   npx . inspect --job-id <jobId>
   npx . mcp
 `,
@@ -51,6 +52,25 @@ async function inspectCommand(args: string[]) {
   return inspectResult(jobId);
 }
 
+async function searchCommand(args: string[]) {
+  const query = readFlagValue(args, "--query");
+  const limit = readFlagValue(args, "--limit");
+  const noOpenBrowser = args.includes("--no-open-browser");
+
+  if (!query) {
+    throw new Error("search requires --query <text>.");
+  }
+
+  return runJob({
+    jobType: "browser_search",
+    query,
+    options: {
+      openBrowser: !noOpenBrowser,
+      ...(limit ? { resultLimit: Number(limit) } : {}),
+    },
+  });
+}
+
 async function main(): Promise<void> {
   const [, , command, ...args] = process.argv;
 
@@ -63,6 +83,9 @@ async function main(): Promise<void> {
       return;
     case "inspect":
       printJson(await inspectCommand(args));
+      return;
+    case "search":
+      printJson(await searchCommand(args));
       return;
     case "mcp":
       await startMcpServer();

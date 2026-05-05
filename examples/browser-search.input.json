@@ -1,0 +1,8 @@
+{
+  "jobType": "browser_search",
+  "query": "hello hermes",
+  "options": {
+    "openBrowser": false,
+    "resultLimit": 5
+  }
+}

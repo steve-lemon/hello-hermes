@@ -24,6 +24,7 @@ describe("syncHermesConfig", () => {
 
     expect(nextConfig.mcp_servers?.existing_tool?.args).toEqual(["existing.js"]);
     expect(nextConfig.mcp_servers?.hello_hermes?.args).toEqual(["/tmp/project/dist/mcp/server.js"]);
+    expect(nextConfig.mcp_servers?.hello_hermes?.tools?.include).toContain("browser_search");
     expect(nextConfig.skills?.external_dirs).toContain("/tmp/project/skills");
   });
 });

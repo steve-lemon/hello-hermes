@@ -1,10 +1,22 @@
 import type { ToolError } from "./errors";
 
-export type JobInput = {
+export type DemoJobInput = {
   jobType: "demo";
   targets: string[];
   options: Record<string, unknown>;
 };
+
+export type BrowserSearchJobInput = {
+  jobType: "browser_search";
+  query: string;
+  options: {
+    openBrowser?: boolean;
+    resultLimit?: number;
+    [key: string]: unknown;
+  };
+};
+
+export type JobInput = DemoJobInput | BrowserSearchJobInput;
 
 export type JobResult = {
   jobId: string;
@@ -19,4 +31,5 @@ export type JobResult = {
   };
   artifacts: string[];
   errors: ToolError[];
+  details?: Record<string, unknown>;
 };

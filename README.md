@@ -4,7 +4,7 @@
 
 ## Project Summary
 
-이 프로젝트는 Hermes 운영 루프에서 호출할 수 있는 TypeScript 도구의 기준점을 만든다. 현재는 `health`, `run`, `inspect`, `mcp` 흐름만 제공하며, 모든 결과를 JSON으로 반환하고 실패를 구조화된 에러 객체로 다루는 최소 계약을 먼저 고정한다.
+이 프로젝트는 Hermes 운영 루프에서 호출할 수 있는 TypeScript 도구의 기준점을 만든다. 현재는 `health`, `run`, `search`, `inspect`, `mcp` 흐름을 제공하며, `hello hermes` 브라우저 검색 결과를 보고하는 예제 기능도 포함한다. 모든 결과는 JSON으로 반환하고 실패는 구조화된 에러 객체로 다룬다.
 
 ## Detected Project Metadata
 
@@ -50,6 +50,7 @@ Phase 3: Hermes 운영
 
 - CLI 실행된다
 - demo job 동작한다
+- browser search가 동작한다
 - MCP에서 호출된다
 - 에러가 구조적으로 나온다
 
@@ -58,6 +59,7 @@ Phase 3: Hermes 운영
 ```bash
 npx . health
 npx . run --input examples/job.input.json
+npx . search --query "hello hermes"
 npx . mcp
 ```
 

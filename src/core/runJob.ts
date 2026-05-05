@@ -1,8 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { executeBrowserSearch } from "./browserSearch";
 import { unknownToolError } from "./errors";
-import type { JobInput, JobResult } from "./types";
+import type { BrowserSearchJobInput, DemoJobInput, JobResult } from "./types";
 import { validateJobInput } from "./validation";
 import { getWorkspaceRoot, toWorkspaceRelativePath } from "./workspace";
 
@@ -13,7 +14,7 @@ function createJobId(): string {
   return `demo-job-${timestamp}-${randomPart}`;
 }
 
-function createDemoResult(jobId: string, startedAt: string, input: JobInput): JobResult {
+function createDemoResult(jobId: string, startedAt: string, input: DemoJobInput): JobResult {
   const total = input.targets.length;
 
   return {
@@ -32,6 +33,40 @@ function createDemoResult(jobId: string, startedAt: string, input: JobInput): Jo
   };
 }
 
+async function createBrowserSearchResult(
+  jobId: string,
+  startedAt: string,
+  input: BrowserSearchJobInput,
+): Promise<JobResult> {
+  const search = await executeBrowserSearch(input);
+  const topResult = search.results[0];
+
+  return {
+    jobId,
+    status: "ok",
+    summary: topResult
+      ? `Browser search completed for "${input.query}". Top result: ${topResult.title}.`
+      : `Browser search completed for "${input.query}".`,
+    startedAt,
+    finishedAt: new Date().toISOString(),
+    counts: {
+      total: search.results.length,
+      success: search.results.length,
+      failed: 0,
+    },
+    artifacts: [],
+    errors: [],
+    details: {
+      query: search.query,
+      searchUrl: search.searchUrl,
+      browserOpened: search.browserOpened,
+      browserOpenAttempted: search.browserOpenAttempted,
+      warnings: search.warnings,
+      results: search.results,
+    },
+  };
+}
+
 export async function runJob(input: unknown): Promise<JobResult> {
   const startedAt = new Date().toISOString();
   const workspaceRoot = getWorkspaceRoot();
@@ -39,7 +74,10 @@ export async function runJob(input: unknown): Promise<JobResult> {
 
   try {
     const jobInput = validateJobInput(input);
-    const result = createDemoResult(jobId, startedAt, jobInput);
+    const result =
+      jobInput.jobType === "browser_search"
+        ? await createBrowserSearchResult(jobId, startedAt, jobInput)
+        : createDemoResult(jobId, startedAt, jobInput);
     const artifactPath = path.join(workspaceRoot, "artifacts", `${jobId}.json`);
     const relativeArtifactPath = toWorkspaceRelativePath(artifactPath);
 
